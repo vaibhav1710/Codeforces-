@@ -1,0 +1,104 @@
+import java.net.CookieHandler;
+import java.util.*;
+import java.io.*;
+
+public class fastTemp {
+    static FastScanner fs = null;
+    static  int bit[];
+   
+    public static void main(String[] args) {
+
+
+        fs = new FastScanner();
+        PrintWriter out = new PrintWriter(System.out);
+
+        int t = fs.nextInt();
+        outer:
+        while (t-- > 0) {
+            int n = fs.nextInt();
+            int a[] = fs.readArray(n);
+            bit = new int[n+1];
+            long ans=1;
+            Stack<Pair> s = new Stack<>();
+            s.add(new Pair(a[n-1],a[n-1]));
+            update(n,a[n-1],1);
+            for(int i=n-2;i>=0;i--){
+                int x = a[i];
+                long y = sum(x);
+                if(y==0) {
+                s.add(new Pair(a[i],a[i]));
+                }else{
+                    int min = Integer.MAX_VALUE;
+                    while(s.size()>0 && (s.peek().x<a[i] || s.peek().y<a[i])){
+                        Pair r = s.pop();
+                        min = Math.min(min,r.y);
+                    }
+                    s.add(new Pair(a[i],min));
+                }
+                update(n,a[i],1);
+            }
+            out.println(s.size());
+        }
+        out.close();
+    }
+
+
+// Fenwick Tree
+    public static void update(int n,int i,int x){
+        for(;i<=n;i+=(i&(-i))){
+            bit[i] += x;
+        }
+    }
+    public static long sum(int i){
+        long sum=0;
+        for(;i>0 ;i -= (i&(-i))){
+            sum += bit[i];
+        }
+        return sum;
+    }
+
+    static class Pair implements Comparable<Pair> {
+        int x;
+        int y;
+
+        Pair(int x, int y) {
+            this.x = x;
+            this.y = y;
+
+        }
+
+        public int compareTo(Pair o) {
+            return this.x - o.x;
+        }
+    }
+
+    static class FastScanner {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer("");
+
+        String next() {
+            while (!st.hasMoreTokens())
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        int[] readArray(int n) {
+            int[] a = new int[n];
+            for (int i = 0; i < n; i++) a[i] = nextInt();
+            return a;
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+    }
+
+}
