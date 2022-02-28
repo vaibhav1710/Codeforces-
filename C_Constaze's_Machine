@@ -1,0 +1,104 @@
+import java.util.*;
+import java.awt.geom.AffineTransform;
+import java.io.*;
+
+public class fastTempE {
+    static FastScanner fs = null;
+    public static void main(String[] args) {
+
+
+        fs = new FastScanner();
+        PrintWriter out = new PrintWriter(System.out);
+
+		
+        String string = fs.next();
+        int count=0;
+        int fib[] = new int[100001];
+        fib[0]=1;
+        fib[1]=1;
+        
+        ArrayList<Integer> aList = new ArrayList<>();
+        boolean f = true;
+        int m = 1_000_000_007;
+        for(int i=2;i<100001;i++) {
+        	fib[i] = (fib[i-1]+fib[i-2])%m;
+        }
+        long ans=1l;
+        for(int i=0 ; i<string.length();i++) {
+        	if(string.charAt(i)=='m' || string.charAt(i)=='w') {
+        		f = false;
+        		break;
+        	}else if(string.charAt(i)=='u' || string.charAt(i)=='n') {
+        		if(string.charAt(i)=='u') {
+        		count=1;
+        		int j=i+1;
+        		while(j<string.length() && string.charAt(j)=='u') {
+        			count++;
+        			j++;
+        	}
+        		i = j-1;
+        		ans = (ans*fib[count])%m;
+        		count=0;
+        	}else {
+        		count=1;
+        		int j=i+1;
+        		while(j<string.length() && string.charAt(j)=='n') {
+        			count++;
+        			j++;
+        	}
+        		i = j-1;
+        		ans = (ans*fib[count])%m;
+        		count=0;
+        	}
+        }else {
+        	
+        }
+    }
+        	
+        	if(f) {
+        		out.println(ans);
+        	}else {
+        		out.println(0);
+        	}
+        
+        out.close();
+}
+
+    static class FastScanner {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer("");
+
+        String next() {
+            while (!st.hasMoreTokens())
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        int[] readArray(int n) {
+            int[] a = new int[n];
+            for (int i = 0; i < n; i++) a[i] = nextInt();
+            return a;
+        }
+
+        long[] readlongArray(int n){
+            long[] a = new long[n];
+            for (int i = 0; i < n; i++) a[i] = nextLong();
+            return a;
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+    }
+
+
+
+}
